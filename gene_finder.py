@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-YOUR HEADER COMMENT HERE
+Gene Finder finds amino acid sequences that are likely coded by the specified
+DNA input
 
 @author: Vicky McDermott
 
@@ -25,10 +26,16 @@ def get_complement(nucleotide):
 
         nucleotide: a nucleotide (A, C, G, or T) represented as a string
         returns: the complementary nucleotide
+
+        added doctest for input of empty string and random letter
     >>> get_complement('A')
     'T'
     >>> get_complement('C')
     'G'
+    >>> get_complement('')
+    ''
+    >>> get_complement('L')
+    ''
     """
     if(nucleotide == 'A'):
         return 'T'
@@ -38,6 +45,8 @@ def get_complement(nucleotide):
         return 'G'
     elif(nucleotide == 'G'):
         return 'C'
+    else:
+        return ''
 
 
 def get_reverse_complement(dna):
@@ -46,10 +55,14 @@ def get_reverse_complement(dna):
 
         dna: a DNA sequence represented as a string
         returns: the reverse complementary DNA sequence represented as a string
+
+        added doctest for input of empty string
     >>> get_reverse_complement("ATGCCCGCTTT")
     'AAAGCGGGCAT'
     >>> get_reverse_complement("CCGCGTTCA")
     'TGAACGCGG'
+    >>> get_reverse_complement("")
+    ''
     """
     complement = ''
     i = len(dna)-1
@@ -67,6 +80,8 @@ def rest_of_ORF(dna):
 
         dna: a DNA sequence
         returns: the open reading frame represented as a string
+
+        added doctest for input of empty string
     >>> rest_of_ORF("ATGTGAA")
     'ATG'
     >>> rest_of_ORF("ATGAGATAGG")
@@ -93,8 +108,12 @@ def find_all_ORFs_oneframe(dna):
 
         dna: a DNA sequence
         returns: a list of non-nested ORFs
+
+        added doctest to ensure nested ORFs are not included
     >>> find_all_ORFs_oneframe("ATGCATGAATGTAGATAGATGTGCCC")
     ['ATGCATGAATGTAGA', 'ATGTGCCC']
+    >>> find_all_ORFs_oneframe("ATGAAAATGAAATAG")
+    ['ATGAAAATGAAA']
     """
     i = 0
     myORFS = []
@@ -118,6 +137,7 @@ def find_all_ORFs(dna):
         dna: a DNA sequence
         returns: a list of non-nested ORFs
 
+        added doctest to ensure nested ORFs are not included
     >>> find_all_ORFs("ATGCATGAATGTAG")
     ['ATGCATGAATGTAG', 'ATGAATGTAG', 'ATG']
     >>> find_all_ORFs_both_strands("ATGCGAATGTAG")
@@ -136,8 +156,12 @@ def find_all_ORFs_both_strands(dna):
 
         dna: a DNA sequence
         returns: a list of non-nested ORFs
+
+        added doctest to ensure empty string does not break it
     >>> find_all_ORFs_both_strands("ATGCGAATGTAGCATCAAA")
     ['ATGCGAATG', 'ATGCTACATTCGCAT']
+    >>> find_all_ORFs_both_strands("")
+    []
     """
     myOrfs = []
     myOrfs = find_all_ORFs(dna) + find_all_ORFs(get_reverse_complement(dna))
