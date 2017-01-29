@@ -171,11 +171,20 @@ def find_all_ORFs_both_strands(dna):
 def longest_ORF(dna):
     """ Finds the longest ORF on both strands of the specified DNA and returns it
         as a string
+
+        dna: a DNA sequence
+        returns: string containing longest ORF on both strands
+
     >>> longest_ORF("ATGCGAATGTAGCATCAAA")
     'ATGCTACATTCGCAT'
     """
-    # TODO: implement this
-    pass
+    longOrfs = []
+    longest = ''
+    longOrfs = find_all_ORFs_both_strands(dna)
+    for i in range(len(longOrfs)):
+        if len(longOrfs[i]) > len(longest):
+            longest = longOrfs[i]
+    return longest
 
 
 def longest_ORF_noncoding(dna, num_trials):
@@ -185,8 +194,13 @@ def longest_ORF_noncoding(dna, num_trials):
         dna: a DNA sequence
         num_trials: the number of random shuffles
         returns: the maximum length longest ORF """
-    # TODO: implement this
-    pass
+    longestlen = 0
+    for i in range(num_trials):
+        dna = shuffle_string(dna)
+        num = len(longest_ORF(dna))
+        if num > longestlen:
+            longestlen = num
+    return longestlen
 
 
 def coding_strand_to_AA(dna):
@@ -203,8 +217,14 @@ def coding_strand_to_AA(dna):
         >>> coding_strand_to_AA("ATGCCCGCTTT")
         'MPA'
     """
-    # TODO: implement this
-    pass
+    i = 0
+    aminos = ''
+    while i < len(dna):
+        if len(dna[i:i+3]) == 3:
+            amino_acid = aa_table[dna[i:i+3]]
+            aminos = aminos + amino_acid
+        i = i + 3
+    return aminos
 
 
 def gene_finder(dna):
@@ -213,8 +233,13 @@ def gene_finder(dna):
         dna: a DNA sequence
         returns: a list of all amino acid sequences coded by the sequence dna.
     """
-    # TODO: implement this
-    pass
+    aminoseqs = []
+    threshold = longest_ORF_noncoding(dna, 1500)
+    myOrfs = find_all_ORFs_both_strands(dna)
+    for i in range(len(myOrfs)):
+        if len(myOrfs[i]) > threshold:
+            aminoseqs.append(coding_strand_to_AA(myOrfs[i]))
+    return aminoseqs
 
 
 if __name__ == "__main__":
