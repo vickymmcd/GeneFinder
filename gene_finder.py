@@ -181,9 +181,9 @@ def longest_ORF(dna):
     longOrfs = []
     longest = ''
     longOrfs = find_all_ORFs_both_strands(dna)
-    for i in range(len(longOrfs)):
-        if len(longOrfs[i]) > len(longest):
-            longest = longOrfs[i]
+    for orf in longOrfs:
+        if len(orf) > len(longest):
+            longest = orf
     return longest
 
 
@@ -222,8 +222,8 @@ def coding_strand_to_AA(dna):
     while i < len(dna):
         if len(dna[i:i+3]) == 3:
             amino_acid = aa_table[dna[i:i+3]]
-            aminos = aminos + amino_acid
-        i = i + 3
+            aminos += amino_acid
+        i += 3
     return aminos
 
 
@@ -236,9 +236,9 @@ def gene_finder(dna):
     aminoseqs = []
     threshold = longest_ORF_noncoding(dna, 1500)
     myOrfs = find_all_ORFs_both_strands(dna)
-    for i in range(len(myOrfs)):
-        if len(myOrfs[i]) > threshold:
-            aminoseqs.append(coding_strand_to_AA(myOrfs[i]))
+    for orf in myOrfs:
+        if len(orf) > threshold:
+            aminoseqs.append(coding_strand_to_AA(orf))
     return aminoseqs
 
 
